@@ -15,7 +15,7 @@ public class AnimalController : ControllerBase
   [HttpGet]
   public IActionResult GetAnimals()
   {
-    var animals = new MockDB().Animals;
+    var animals = StaticData.Animals;
     return Ok(animals);
   }
 
@@ -31,6 +31,7 @@ public class AnimalController : ControllerBase
     }
     return Ok(animal);
   }
+  
   [HttpPost] 
   public IActionResult AddAnimal(Animal animal)
   {
@@ -54,11 +55,9 @@ public class AnimalController : ControllerBase
       return NotFound();
     }
 
-    existingAnimal.NameType = animal.NameType;
-    existingAnimal.Category = animal.Category;
-    existingAnimal.Mass = animal.Mass;
-    existingAnimal.FurColor = animal.FurColor;
-    return NoContent();
+    StaticData.Animals.Remove(existingAnimal);
+    StaticData.Animals.Add(animal);
+    return Ok($"Updated anima ID={animal.Id}");
   }
   
   
@@ -73,6 +72,6 @@ public class AnimalController : ControllerBase
     }
 
     StaticData.Animals.Remove(animal);
-    return NoContent();
+    return Ok($"Deleted the animal with ID={animal.Id}");
   }
 }
