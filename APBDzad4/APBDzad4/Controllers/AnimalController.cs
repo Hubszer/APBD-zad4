@@ -1,6 +1,7 @@
 using APBDzad4.DataBase;
 using APBDzad4.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
 
 namespace APBDzad4.Controllers;
 
@@ -16,16 +17,36 @@ public class AnimalController : ControllerBase
     
   }
 
-[HttpGet]
+  [HttpGet]
   public IActionResult GetAnimals()
   {
     var animals = new MockDB().Animals;
     return Ok(animals);
-  }  
-  [HttpPost]
-  public IActionResult AddAnimal()
+  }
+
+  
+
+  [HttpGet("{id}")]
+  public IActionResult GetAnimal(int id)
   {
-    return Created();
+    var animal = StaticData.Animals.FirstOrDefault(a => a.Id == id);
+    if (animal == null)
+    {
+      return NotFound();
+    }
+    return Ok(animal);
+  }
+  [HttpPost] 
+  public IActionResult AddAnimal(Animal animal)
+  {
+    if (animal == null)
+    {
+      return NotFound();
+    }
+
+    animal.Id = StaticData.Animals.Max(a => a.Id) + 1;
+    StaticData.Animals.Add(animal);
+    return CreatedAtAction(nameof(GetAnimal), new { id = animal.Id }, animal);
   }
 
   [HttpPut]
@@ -47,9 +68,9 @@ public class AnimalController : ControllerBase
   
   
   [HttpDelete]
-  public IActionResult DeleteAnimal(int Id)
+  public IActionResult DeleteAnimal(int id)
   {
-    var animal = StaticData.Animals.FirstOrDefault(a => a.Id == Id);
+    var animal = StaticData.Animals.FirstOrDefault(a => a.Id == id);
 
     if (animal == null)
     {
