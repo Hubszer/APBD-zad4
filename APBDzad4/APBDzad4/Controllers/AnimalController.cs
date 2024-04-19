@@ -18,9 +18,7 @@ public class AnimalController : ControllerBase
     var animals = StaticData.Animals;
     return Ok(animals);
   }
-
   
-
   [HttpGet("{id}")]
   public IActionResult GetAnimal(int id)
   {
