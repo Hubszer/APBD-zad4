@@ -11,12 +11,7 @@ namespace APBDzad4.Controllers;
 //[Route("[Controller]")]
 public class AnimalController : ControllerBase
 {
-
-  public AnimalController()
-  {
-    
-  }
-
+  
   [HttpGet]
   public IActionResult GetAnimals()
   {
